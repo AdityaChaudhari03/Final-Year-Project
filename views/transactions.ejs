@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicLedger</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+        .navbar-brand {
+            color: #007bff !important;
+            font-weight: bold;
+        }
+        .nav-link {
+            color: #333 !important;
+        }
+        .nav-link.active {
+            color: #007bff !important;
+            font-weight: bold;
+        }
+        .table thead {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+        .table tbody tr:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+        .transaction-card {
+            background-color: #ffffff;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .transaction-card p {
+            margin: 5px 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .btn-outline-danger {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+    <a class="navbar-brand fw-bold" href="/index">CivicLedger</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="/index">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/add">Allocate Funds</a></li>
+            <li class="nav-item"><a class="nav-link" href="/graph">Fund Tracking</a></li>
+            <li class="nav-item"><a class="nav-link" href="/department_transactions">Transactions</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/transactions">Blockchain</a></li>
+        </ul>
+        <span class="navbar-text me-3">Hello, <%= username %></span>
+        <form action="/logout?_method=DELETE" method="POST">
+            <button class="btn btn-outline-danger">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4 fw-bold">Blockchain Transactions</h2>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Timestamp</th>
+                    <th>Transactions</th>
+                    <th>Nonce</th>
+                    <th>Previous Block Hash</th>
+                    <th>Hash</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% blockchain_transactions.forEach(function(block){ %>
+                    <tr>
+                        <td><%= block.index %></td>
+                        <td><%= block.timestamp %></td>
+                        <td>
+                            <% if(block.transactions.length > 0) { %>
+                                <% block.transactions.forEach(function(transaction){ %>
+                                    <div class="transaction-card">
+                                        <p><strong>💰 Amount:</strong> <%= transaction.amount %></p>
+                                        <p><strong>📤 Sender:</strong> <%= transaction.sender %></p>
+                                        <p><strong>📥 Recipient:</strong> <%= transaction.recipient %></p>
+                                        <p><strong>🏗 Project:</strong> <%= transaction.project %></p>
+                                        <p><strong>🆔 Transaction ID:</strong> <%= transaction.transactionId %></p>
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <span class="text-warning">No Transactions</span>
+                            <% } %>
+                        </td>
+                        <td><%= block.nonce %></td>
+                        <td class="text-truncate" style="max-width: 200px;"><%= block.previousBlockHash %></td>
+                        <td class="text-truncate" style="max-width: 200px;"><%= block.hash %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

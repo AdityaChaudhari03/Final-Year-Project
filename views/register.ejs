@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicLedger</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            color: #007bff !important;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            color: #007bff !important;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2 {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .form-label {
+            color: #555;
+            font-weight: 500;
+        }
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+        }
+        .btn-custom {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-outline-secondary {
+            border: 1px solid #007bff;
+            color: #007bff;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .text-center a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">CivicLedger</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/add">Allocate Funds</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/graph">Fund Tracking</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="form-container">
+            <h2 class="text-center">Register</h2>
+            <form action="/register" method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="type" class="form-label">Type</label>
+                    <select class="form-control" name="type" id="type" required>
+                        <option value="" disabled selected>Select Government Type</option>
+                        <option value="C_Gvt">Central Government</option>
+                        <option value="S_Gvt">State Government</option>
+                        <option value="D_Gvt">District Government</option>
+                        <option value="School">School</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-custom">Register</button>
+                <div class="text-center mt-3">
+                    <a href="/login" class=" btn btn-outline-secondary btn-custom">Already a user? Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

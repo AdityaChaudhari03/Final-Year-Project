@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicLedger - Fund Allocation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        .container {
+            margin-top: 40px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #007bff !important;
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            background-color: #f8f9fa;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            transition: 0.3s;
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #0056b3, #003f7f);
+        }
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
+        .btn-loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .text-center h3 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .badge {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+        }
+        .alert {
+            border-radius: 8px;
+        }
+        .navbar-text {
+            color: #007bff !important;
+        }
+        .btn-outline-danger {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast Notification -->
+    <div class="toast-container">
+        <div id="toastMessage" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">Transaction successful!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (<%= isAdded %> == true) {
+            const toast = new bootstrap.Toast(document.getElementById('toastMessage'));
+            toast.show();
+        }
+    </script>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white px-3">
+        <a class="navbar-brand" href="/index">CivicLedger</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="/index">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/add">Allocate Funds</a></li>
+                <li class="nav-item"><a class="nav-link" href="/graph">Fund Tracking</a></li>
+                <li class="nav-item"><a class="nav-link" href="/department_transactions">Transactions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/transactions">Blockchain</a></li>
+            </ul>
+            <span class="navbar-text me-3">Hello, <%= username %></span>
+            <form action="/logout?_method=DELETE" method="POST">
+                <button class="btn btn-outline-danger" type="submit">Logout</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="text-center">
+            <h3 class="display-5 fw-bold">Public Fund Allocation using Blockchain</h3>
+            <p class="lead">User Type: <span class="badge bg-primary">Government</span></p>
+            <p class="h5">Balance: <span id="balance" class="text-success fw-bold">Rs. <%= centralGvt[0].balance %></span></p>
+        </div>
+
+        <div class="card p-4 mt-4">
+            <h4 class="mb-3 text-center">Allocate Funds to State</h4>
+            <form id="gtogForm" method="POST" action="/allocate/ctos">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="name1" value="Central Government" readonly>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" max="<%= centralGvt[0].balance %>" name="amount" id="amount" placeholder="Enter Amount" required>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="project" class="form-select" required>
+                            <option value="" disabled selected>Select Project</option>
+                            <% projects.forEach(function(project){ %>
+                                <option value="<%= project.name %>"><%= project.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="name2" class="form-select" required>
+                            <option value="" disabled selected>Select State</option>
+                            <% governs.forEach(function(govern){ %>
+                                <option value="<%= govern.name %>"><%= govern.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="col-md-12 text-center mt-3">
+                        <button id="submitBtn" class="btn btn-primary px-4" type="submit">Allocate Funds</button>
+                    </div>
+                </div>
+            </form>
+            <div id="alertBox" class="alert alert-danger mt-3 d-none" role="alert"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('gtogForm').addEventListener('submit', function(event) {
+            const amount = parseInt(document.getElementById('amount').value);
+            const balance = parseInt(<%= centralGvt[0].balance %>);
+
+            if (amount > balance) {
+                event.preventDefault();
+                document.getElementById('alertBox').classList.remove('d-none');
+                document.getElementById('alertBox').innerText = 'Insufficient balance!';
+            } else {
+                document.getElementById('submitBtn').classList.add('btn-loading');
+                document.getElementById('submitBtn').innerText = 'Processing...';
+            }
+        });
+    </script>
+
+</body>
+</html>
