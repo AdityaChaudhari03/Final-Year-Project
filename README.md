@@ -29,12 +29,4 @@ A CivicTech initiative built using **Node.js**, **Neo4j**, and blockchain princi
 
 ---
 
-## 🛠️ Getting Started
 
-Follow these steps to run the project locally:
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/AdityaChaudhari03/Allocation-and-Tracking-of-Public-Funds-Using-Blockchain.git
-cd Allocation-and-Tracking-of-Public-Funds-Using-Blockchain
